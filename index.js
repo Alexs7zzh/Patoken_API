@@ -39,9 +39,11 @@ fastify.decorate('magic', new Magic(process.env.MAGIC_SECRET_KEY))
 fastify.decorateRequest('user', undefined)
 fastify.addHook('preHandler', async (request, reply) => {
   const session = request.cookies.session
+  console.log('session', session)
   if (session) {
     const user = await getSession(session)
     request.user = user
+    console.log('user', user)
   }
 })
 

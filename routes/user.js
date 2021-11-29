@@ -56,7 +56,7 @@ async function route (fastify) {
 
       reply
         .header('Set-Cookie', cookie)
-        .send({ user: request.user })
+        .send(request.user)
     } catch (err) {
       throw { statusCode: 500, message: err.message }
     }
