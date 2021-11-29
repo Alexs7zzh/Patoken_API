@@ -22,6 +22,15 @@ const postOpts = {
         name: { type: 'string' }
       },
       required: ['name']
+    },
+    response: {
+      200: {
+        type: 'object',
+        properties: {
+          email: { type: 'string' },
+          name: { type: 'string' }
+        },
+      }
     }
   }
 }
@@ -57,14 +66,18 @@ async function route (fastify) {
     try {
       if (!request.user) throw { statusCode: 401, message: 'Unauthorized' }
 
-			await fastify.prisma.user.create({
-				data: {
-					email: request.user.email,
-					name: request.body.name
-				}
-			})
+      const data = {
+        email: request.user.email,
+        name: request.body.name
+      }
 
-			reply.status(200).send()
+			await fastify.prisma.user.create({ data })
+
+      const cookie = await createSessionCookie(data)
+
+      reply
+        .header('Set-Cookie', cookie)
+        .send(data)
 		} catch (err) {
       throw { statusCode: 500, message: err.message }
 		}

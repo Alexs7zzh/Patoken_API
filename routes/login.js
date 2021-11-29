@@ -34,15 +34,10 @@ async function route (fastify) {
         }
       })
 
-      console.log({
-        email: metadata.email,
-        name: result && result.name
-      })
       const cookie = await createSessionCookie({
         email: metadata.email,
         name: result && result.name
       })
-      console.log('cookie', cookie)
 
       reply
         .header('Set-Cookie', cookie)
