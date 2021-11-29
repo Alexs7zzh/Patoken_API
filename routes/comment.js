@@ -1,6 +1,4 @@
-import prisma from '../lib/prisma.js'
-import { SESSION_NAME } from '../lib/constants.js'
-import getSession from '../lib/getSession.js'
+'use strict'
 
 const getOpts = {
   schema: {
@@ -87,7 +85,7 @@ async function route (fastify) {
     else if (request.query.id) options = { postId: { in: request.query.id } }
     else throw { statusCode: 400, message: 'Invalid request' }
 
-    const comments = (await prisma.comment.findMany({
+    const comments = (await fastify.prisma.comment.findMany({
       where: options,
       select: {
         id: true,
@@ -108,83 +106,85 @@ async function route (fastify) {
     reply.status(200).send(comments)
   })
 
-  fastify.register(async function protectedRoute(app) {
-    app.decorateRequest('userId', '')
-
-    app.addHook('preHandler', async (request, reply) => {
-      const session = request.cookies[SESSION_NAME]
-      if (!session) throw { statusCode: 401, message: 'Unauthorized' }
-      const user = await getSession(session)
-      const { userId } = await prisma.user.findUnique({
+  fastify.post('/comment', postOpts, async (request, reply) => {
+    try {
+      if (!request.user) throw { statusCode: 401, message: 'Unauthorized' }
+      const { userId } = await fastify.prisma.user.findUnique({
         where: {
-          email: user.email
+          email: request.user.email
         }
       })
-      request.userId = userId
-    })
+      await fastify.prisma.comment.create({
+        data: {
+          text: request.body.text,
+          selectors: request.body.selectors,
+          quote: request.body.quote,
+          author: {
+            connect: { id: userId }
+          },
+          postId: request.body.postId,
+          postAuthor: request.body.postAuthor,
+          category: request.body.category
+        }
+      })
+      reply.status(200).send()
+    } catch (err) {
+      throw { statusCode: 500, message: err.message }
+    }
+  })
 
-    app.post('/comment', postOpts, async (request, reply) => {
-      try {
-        await prisma.comment.create({
-          data: {
-            text: request.body.text,
-            selectors: request.body.selectors,
-            quote: request.body.quote,
-            author: {
-              connect: { id: request.userId }
-            },
-            postId: request.body.postId,
-            postAuthor: request.body.postAuthor,
-            category: request.body.category
-          }
-        })
-        reply.status(200).send()
-      } catch (err) {
-        throw { statusCode: 500, message: err.message }
+  fastify.delete('/comment', deleteOpts, async (request, reply) => {
+    if (!request.user) throw { statusCode: 401, message: 'Unauthorized' }
+    const { userId } = await fastify.prisma.user.findUnique({
+      where: {
+        email: request.user.email
       }
     })
+    const comment = await fastify.prisma.comment.findUnique({
+      where: {
+        id: Number(request.query.id)
+      },
+      select: {
+        authorId: true
+      }
+    })
+    if (comment.authorId === userId) {
+      await fastify.prisma.comment.delete({
+        where: {
+          id: Number(request.query.id)
+        }
+      })
+      reply.status(200).send()
+    } else throw { statusCode: 500 }
+  })
 
-    app.delete('/comment', deleteOpts, async (request, reply) => {
-      const comment = await prisma.comment.findUnique({
+  fastify.put('/comment', putOpts, async (request, reply) => {
+    if (!request.user) throw { statusCode: 401, message: 'Unauthorized' }
+    const { userId } = await fastify.prisma.user.findUnique({
+      where: {
+        email: request.user.email
+      }
+    })
+    const comment = await fastify.prisma.comment.findUnique({
+      where: {
+        id: Number(request.query.id)
+      },
+      select: {
+        authorId: true
+      }
+    })
+    if (comment.authorId === userId) {
+      await fastify.prisma.comment.update({
         where: {
           id: Number(request.query.id)
         },
-        select: {
-          authorId: true
+        data: {
+          text: requst.body.text,
+          category: requst.body.category
         }
       })
-      if (comment.authorId === request.userId) {
-				await prisma.comment.delete({
-					where: {
-						id: Number(request.query.id)
-					}
-				})
-				reply.status(200).send()
-			} else throw { statusCode: 401, message: 'Unauthorized' }
-    })
-
-    app.put('/comment', putOpts, async (request, reply) => {
-      const comment = await prisma.comment.findUnique({
-        where: {
-          id: Number(request.query.id)
-        },
-        select: {
-          authorId: true
-        }
-      })
-      if (comment.authorId === request.userId) {
-				await prisma.comment.update({
-					where: {
-						id: Number(request.query.id)
-					},
-					data: {
-						text: requst.body.text,
-						category: requst.body.category
-					}
-				})
-				reply.status(200).send()
-			} else throw { statusCode: 401, message: 'Unauthorized' }
-    })
+      reply.status(200).send()
+    } else throw { statusCode: 500 }
   })
 }
 

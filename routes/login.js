@@ -1,5 +1,3 @@
-import prisma from '../lib/prisma.js'
-import magic from '../lib/magic.js'
 import createSessionCookie from '../lib/createSessionCookie.js'
 
 const loginOpts = {
@@ -26,26 +24,32 @@ const loginOpts = {
 async function route (fastify) {
   fastify.post('/login', loginOpts, async(request, reply) => {
     try {
-      const didToken = magic.utils.parseAuthorizationHeader(request.headers['authorization'])
-      magic.token.validate(didToken)
+      const didToken = fastify.magic.utils.parseAuthorizationHeader(request.headers['authorization'])
+      fastify.magic.token.validate(didToken)
 
-      const metadata = await magic.users.getMetadataByToken(didToken)
-      const result = await prisma.user.findUnique({
+      const metadata = await fastify.magic.users.getMetadataByToken(didToken)
+      const result = await fastify.prisma.user.findUnique({
         where: {
           email: metadata.email
         }
       })
 
+      console.log({
+        email: metadata.email,
+        name: result && result.name
+      })
       const cookie = await createSessionCookie({
         email: metadata.email,
         name: result && result.name
       })
+      console.log('cookie', cookie)
 
-      reply.header('Set-Cookie', cookie)
-      reply.status(200).send({
-        email: metadata.email,
-        name: result && result.name
-      })
+      reply
+        .header('Set-Cookie', cookie)
+        .send({
+          email: metadata.email,
+          name: result && result.name
+        })
     } catch (err) {
       throw { statusCode: 500, message: err.message }
     }

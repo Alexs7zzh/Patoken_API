@@ -1,6 +1,3 @@
-import prisma from '../lib/prisma.js'
-import { SESSION_NAME } from '../lib/constants.js'
-import getSession from '../lib/getSession.js'
 import createSessionCookie from '../lib/createSessionCookie.js'
 
 const getOpts = {
@@ -32,27 +29,25 @@ const postOpts = {
 async function route (fastify) {
   fastify.get('/user', getOpts, async (request, reply) => {
     try {
-      const session = request.cookies[SESSION_NAME]
-      if (!session) {
+      if (!request.user) {
         reply.status(200).send()
         return
       }
 
-      const user = await getSession(session)
-
-      if (!user.name && user.email) {
-				const { name } = await prisma.user.findUnique({
+      if (!request.user.name && request.user.email) {
+				const { name } = await fastify.prisma.user.findUnique({
 					where: {
-						email: user.email
+						email: request.user.email
 					}
 				})
-				user.name = name
+				request.user.name = name
 			}
-      console.log(user)
-      const cookie = await createSessionCookie(user)
 
-      reply.header('Set-Cookie', cookie)
-      reply.status(200).send({ user })
+      const cookie = await createSessionCookie(request.user)
+
+      reply
+        .header('Set-Cookie', cookie)
+        .send({ user: request.user })
     } catch (err) {
       throw { statusCode: 500, message: err.message }
     }
@@ -60,13 +55,11 @@ async function route (fastify) {
 
   fastify.post('/user', postOpts, async (request, reply) => {
     try {
-      const session = request.cookies[SESSION_NAME]
-      if (!session) throw { statusCode: 401, message: 'Unauthorized' }
+      if (!request.user) throw { statusCode: 401, message: 'Unauthorized' }
 
-			const user = await getSession(session)
-			await prisma.user.create({
+			await fastify.prisma.user.create({
 				data: {
-					email: user.email,
+					email: request.user.email,
 					name: request.body.name
 				}
 			})
