@@ -48,6 +48,38 @@ const postOpts = {
   }
 }
 
+const deleteOpts = {
+  schema: {
+    querystring: {
+      type: 'object',
+      properties: {
+        id: { type: 'string' }
+      },
+      required: ['id']
+    }
+  }
+}
+
+const putOpts = {
+  schema: {
+    querystring: {
+      type: 'object',
+      properties: {
+        id: { type: 'string' }
+      },
+      required: ['id']
+    },
+    body: {
+      type: 'object',
+      properties: {
+        text: { type: 'string' },
+        category: { type: 'string' },
+      },
+      required: ['text', 'category']
+    }
+  }
+}
+
 async function route (fastify) {
   fastify.get('/comment', getOpts, async (request, reply) => {
     let options = {}
@@ -99,7 +131,7 @@ async function route (fastify) {
             selectors: request.body.selectors,
             quote: request.body.quote,
             author: {
-              connect: { request.userId }
+              connect: { id: request.userId }
             },
             postId: request.body.postId,
             postAuthor: request.body.postAuthor,
@@ -112,7 +144,47 @@ async function route (fastify) {
       }
     })
 
-    
+    app.delete('/comment', deleteOpts, async (request, reply) => {
+      const comment = await prisma.comment.findUnique({
+        where: {
+          id: Number(request.query.id)
+        },
+        select: {
+          authorId: true
+        }
+      })
+      if (comment.authorId === request.userId) {
+				await prisma.comment.delete({
+					where: {
+						id: Number(request.query.id)
+					}
+				})
+				reply.status(200).send()
+			} else throw { statusCode: 401, message: 'Unauthorized' }
+    })
+
+    app.put('/comment', putOpts, async (request, reply) => {
+      const comment = await prisma.comment.findUnique({
+        where: {
+          id: Number(request.query.id)
+        },
+        select: {
+          authorId: true
+        }
+      })
+      if (comment.authorId === request.userId) {
+				await prisma.comment.update({
+					where: {
+						id: Number(request.query.id)
+					},
+					data: {
+						text: requst.body.text,
+						category: requst.body.category
+					}
+				})
+				reply.status(200).send()
+			} else throw { statusCode: 401, message: 'Unauthorized' }
+    })
   })
 }
 
