@@ -112,7 +112,7 @@ async function route (fastify) {
     app.decorateRequest('userId', '')
 
     app.addHook('preHandler', async (request, reply) => {
-      const session = req.cookies[SESSION_NAME]
+      const session = request.cookies[SESSION_NAME]
       if (!session) throw { statusCode: 401, message: 'Unauthorized' }
       const user = await getSession(session)
       const { userId } = await prisma.user.findUnique({
