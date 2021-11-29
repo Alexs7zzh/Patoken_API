@@ -1,6 +1,7 @@
 {
 	"name": "api",
 	"type": "module",
+	"version": "0.1.0",
 	"scripts": {
 		"start": "node index.js"
 	},
