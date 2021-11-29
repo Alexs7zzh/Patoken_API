@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Category {
+  BEFORE
+  AFTER
+}
+
+model Comment {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  text      String
+  quote     String
+  selectors Json
+  category  Category
+
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  String
+
+  postId     String
+  postAuthor String
+  @@map(name: "comments")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String    @unique
+  email         String    @unique
+  comments      Comment[] 
+}
