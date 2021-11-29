@@ -39,6 +39,9 @@ async function route (fastify) {
         name: result && result.name
       })
 
+      console.log('metadata', metadata)
+      console.log('cookie', cookie)
+
       reply
         .header('Set-Cookie', cookie)
         .send({
