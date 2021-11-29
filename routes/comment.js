@@ -109,13 +109,12 @@ async function route (fastify) {
   fastify.post('/comment', postOpts, async (request, reply) => {
     try {
       if (!request.user) throw { statusCode: 401, message: 'Unauthorized' }
-      console.log(request.user.email)
-      const { userId } = await fastify.prisma.user.findUnique({
+      const { id: userId } = await fastify.prisma.user.findUnique({
         where: {
           email: request.user.email
         }
       })
-      console.log('userId', userId)
+
       await fastify.prisma.comment.create({
         data: {
           text: request.body.text,
@@ -138,7 +137,7 @@ async function route (fastify) {
 
   fastify.delete('/comment', deleteOpts, async (request, reply) => {
     if (!request.user) throw { statusCode: 401, message: 'Unauthorized' }
-    const { userId } = await fastify.prisma.user.findUnique({
+    const { id: userId } = await fastify.prisma.user.findUnique({
       where: {
         email: request.user.email
       }
@@ -163,7 +162,7 @@ async function route (fastify) {
 
   fastify.put('/comment', putOpts, async (request, reply) => {
     if (!request.user) throw { statusCode: 401, message: 'Unauthorized' }
-    const { userId } = await fastify.prisma.user.findUnique({
+    const { id: userId } = await fastify.prisma.user.findUnique({
       where: {
         email: request.user.email
       }
