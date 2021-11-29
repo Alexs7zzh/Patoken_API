@@ -18,7 +18,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: name/app
+          images: alexzzhs7/patoken
           tags: |
             type=schedule
             type=ref,event=branch
