@@ -108,7 +108,7 @@ async function route (fastify) {
     reply.status(200).send(comments)
   })
 
-  fastify.register(async function protected (app) {
+  fastify.register(async function protectedRoute(app) {
     app.decorateRequest('userId', '')
 
     app.addHook('preHandler', async (request, reply) => {
