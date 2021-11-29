@@ -109,6 +109,7 @@ async function route (fastify) {
   fastify.post('/comment', postOpts, async (request, reply) => {
     try {
       if (!request.user) throw { statusCode: 401, message: 'Unauthorized' }
+      console.log(request.user.email)
       const { userId } = await fastify.prisma.user.findUnique({
         where: {
           email: request.user.email
