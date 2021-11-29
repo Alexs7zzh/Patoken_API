@@ -42,6 +42,7 @@ fastify.addHook('preHandler', async (request, reply) => {
   if (session) {
     const user = await getSession(session)
     request.user = user
+    console.log(request.user)
   }
 })
 
