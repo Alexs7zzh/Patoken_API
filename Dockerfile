@@ -1,6 +1,6 @@
 FROM node:lts-slim
 
-RUN apt-get update && apt-get upgrade -y && apt-get autoclean -y && apt-get autoremove -y && apt-get -y install libssl-dev
+RUN apt-get -y install libssl-dev
 
 WORKDIR /usr/src/app
 COPY package*.json ./
