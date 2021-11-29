@@ -114,6 +114,7 @@ async function route (fastify) {
           email: request.user.email
         }
       })
+      console.log('userId', userId)
       await fastify.prisma.comment.create({
         data: {
           text: request.body.text,
@@ -129,6 +130,7 @@ async function route (fastify) {
       })
       reply.status(200).send()
     } catch (err) {
+      console.log(err)
       throw { statusCode: 500, message: err.message }
     }
   })
