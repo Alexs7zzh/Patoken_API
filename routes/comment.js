@@ -181,12 +181,12 @@ async function route (fastify) {
           id: Number(request.query.id)
         },
         data: {
-          text: requst.body.text,
-          category: requst.body.category
+          text: request.body.text,
+          category: request.body.category
         }
       })
       reply.status(200).send()
-    } else throw { statusCode: 500 }
+    } else throw { statusCode: 401, message: 'Unauthorized' }
   })
 }
 
