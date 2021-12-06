@@ -17,6 +17,6 @@
 		"fastify-cors": "^6.0.2"
 	},
 	"devDependencies": {
-		"prisma": "^3.5.0"
+		"prisma": "^3.6.0"
 	}
 }
