@@ -7,10 +7,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Category {
-  BEFORE
-  AFTER
+
+model User {
+  id            String    @id @default(cuid())
+  name          String    @unique
+  email         String    @unique
+  comments      Comment[]
+  stuff         Stuff[]
 }
+
 
 model Comment {
   id        Int       @id @default(autoincrement())
@@ -22,7 +27,7 @@ model Comment {
   selectors Json
   category  Category
 
-  author    User      @relation(fields: [authorId], references: [id])
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
 
   postId     String
@@ -30,9 +35,21 @@ model Comment {
   @@map(name: "comments")
 }
 
-model User {
-  id            String    @id @default(cuid())
-  name          String    @unique
-  email         String    @unique
-  comments      Comment[] 
+enum Category {
+  BEFORE
+  AFTER
+}
+
+
+model Stuff {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  name      String
+  text      String
+  tag       String
+
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
 }
