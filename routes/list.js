@@ -68,7 +68,7 @@ const putOpts = {
 
 async function route (fastify) {
   fastify.get('/list', getOpts, async (request, reply) => {
-    const stuff = (await fastify.prisma.comment.findMany({
+    const stuff = (await fastify.prisma.stuff.findMany({
       select: {
         id: true,
         name: true,
