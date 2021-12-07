@@ -11,7 +11,7 @@ const getOpts = {
             id: { type: 'number' },
             name: { type: 'string' },
             text: { type: 'string' },
-            tag: { type: 'string' },
+            category: { type: 'string' },
             author: { type: 'string' },
           }
         }
@@ -27,7 +27,7 @@ const postOpts = {
       properties: {
         name: { type: 'string' },
         text: { type: 'string' },
-        tag: { type: 'string' }
+        category: { type: 'string' }
       },
     }
   }
@@ -59,7 +59,7 @@ const putOpts = {
       properties: {
         name: { type: 'string' },
         text: { type: 'string' },
-        tag: { type: 'string' },
+        category: { type: 'string' },
       },
       required: ['name', 'text', 'tag']
     }
@@ -73,7 +73,7 @@ async function route (fastify) {
         id: true,
         name: true,
         text: true,
-        tag: true,
+        category: true,
         author: {
           select: {
             name: true
@@ -102,7 +102,7 @@ async function route (fastify) {
         data: {
           name: request.body.name,
           text: request.body.text,
-          tag: request.body.tag,
+          category: request.body.category,
           author: {
             connect: { id: userId }
           }
@@ -164,7 +164,7 @@ async function route (fastify) {
         data: {
           name: request.body.name,
           text: request.body.text,
-          tag: request.body.tag,
+          category: request.body.category,
         }
       })
       reply.status(200).send()
