@@ -10,6 +10,7 @@ import getSession from './lib/getSession.js'
 import commentRoute from './routes/comment.js'
 import loginRoute from './routes/login.js'
 import userRoute from './routes/user.js'
+import listRoute from './routes/list.js'
 
 dotenv.config()
 
@@ -50,6 +51,7 @@ fastify.addHook('preHandler', async (request, reply) => {
 fastify.register(commentRoute)
 fastify.register(loginRoute)
 fastify.register(userRoute)
+fastify.register(listRoute)
 
 const start = async () => {
   try {
