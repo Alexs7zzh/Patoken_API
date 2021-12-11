@@ -1,4 +1,5 @@
 'use strict'
+import transform from '../lib/transform'
 
 const getOpts = {
   schema: {
@@ -115,9 +116,11 @@ async function route (fastify) {
         }
       })
 
+      const text = await transform(request.body.text)
+
       await fastify.prisma.comment.create({
         data: {
-          text: request.body.text,
+          text,
           selectors: request.body.selectors,
           quote: request.body.quote,
           author: {
@@ -176,12 +179,14 @@ async function route (fastify) {
       }
     })
     if (comment.authorId === userId) {
+      const text = await transform(request.body.text)
+
       await fastify.prisma.comment.update({
         where: {
           id: Number(request.query.id)
         },
         data: {
-          text: request.body.text,
+          text,
           category: request.body.category
         }
       })
