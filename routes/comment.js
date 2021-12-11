@@ -1,5 +1,5 @@
 'use strict'
-import transform from '../lib/transform'
+import transform from '../lib/transform.js'
 
 const getOpts = {
   schema: {
