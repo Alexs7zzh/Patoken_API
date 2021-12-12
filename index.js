@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import cookie from 'fastify-cookie'
 import cors from 'fastify-cors'
 import pkg from '@prisma/client'
+import got from 'got'
 import { Magic } from '@magic-sdk/admin'
 import getSession from './lib/getSession.js'
 
@@ -46,6 +47,23 @@ fastify.addHook('preHandler', async (request, reply) => {
     request.user = user
     console.log('user', user)
   }
+})
+fastify.addHook('onError', async (request, reply, error) => {
+  const content = `${reply.statusCode} [${request.method}] ${request.url}
+
+${error.message}`
+
+  await got.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      chat_id: process.env.TELEGRAM_CHAT_ID,
+      text: content,
+      parse_mode: 'markdown',
+      disable_web_page_preview: true
+    })
+  })
 })
 
 fastify.register(commentRoute)
