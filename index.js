@@ -65,6 +65,23 @@ ${error.message}`
     })
   })
 })
+fastify.addHook('onResponse', async (request, reply) => {
+  if (reply.statusCode !== 200) {
+    const content = `${reply.statusCode} [${request.method}] ${request.url}`
+
+    await got.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        chat_id: process.env.TELEGRAM_CHAT_ID,
+        text: content,
+        parse_mode: 'markdown',
+        disable_web_page_preview: true
+      })
+    })
+  }
+})
 
 fastify.register(commentRoute)
 fastify.register(loginRoute)
