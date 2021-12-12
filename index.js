@@ -66,7 +66,7 @@ ${error.message}`
   })
 })
 fastify.addHook('onResponse', async (request, reply) => {
-  if (reply.statusCode !== 200) {
+  if (reply.statusCode !== 200 && reply.statusCode !== 204) {
     const content = `${reply.statusCode} [${request.method}] ${request.url}`
 
     await got.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
