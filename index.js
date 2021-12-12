@@ -41,7 +41,6 @@ fastify.decorate('magic', new Magic(process.env.MAGIC_SECRET_KEY))
 fastify.decorateRequest('user', undefined)
 fastify.addHook('preHandler', async (request, reply) => {
   const session = request.cookies.session
-  console.log('session', session)
   if (session) {
     const user = await getSession(session)
     request.user = user
@@ -49,6 +48,7 @@ fastify.addHook('preHandler', async (request, reply) => {
   }
 })
 fastify.addHook('onError', async (request, reply, error) => {
+  console.log('error', error)
   const content = `${reply.statusCode} [${request.method}] ${request.url}
 
 ${error.message}`
