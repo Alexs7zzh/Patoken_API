@@ -20,7 +20,6 @@ const getOpts = {
             text: { type: 'string' },
             quote: { type: 'string' },
             postId: { type: 'string' },
-            updatedAt: { type: 'string' },
             category: { type: 'string' },
             author: { type: 'string' },
             selectors: { type: 'array' }
@@ -94,7 +93,6 @@ async function route (fastify) {
         quote: true,
         selectors: true,
         postId: true,
-        updatedAt: true,
         category: true,
         author: {
           select: {
