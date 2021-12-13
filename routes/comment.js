@@ -131,7 +131,7 @@ async function route (fastify) {
           category: request.body.category
         }
       })
-      reply.status(200).send()
+      reply.status(201).send()
     } catch (err) {
       console.log(err)
       throw { statusCode: 500, message: err.message }
@@ -159,7 +159,7 @@ async function route (fastify) {
           id: Number(request.query.id)
         }
       })
-      reply.status(200).send()
+      reply.status(204).send()
     } else throw { statusCode: 500 }
   })
 
@@ -190,7 +190,7 @@ async function route (fastify) {
           category: request.body.category
         }
       })
-      reply.status(200).send()
+      reply.status(204).send()
     } else throw { statusCode: 401, message: 'Unauthorized' }
   })
 }

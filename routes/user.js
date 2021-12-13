@@ -76,6 +76,7 @@ async function route (fastify) {
       const cookie = await createSessionCookie(data)
 
       reply
+        .status(201)
         .header('Set-Cookie', cookie)
         .send(data)
 		} catch (err) {
