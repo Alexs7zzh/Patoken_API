@@ -32,7 +32,7 @@ fastify.setValidatorCompiler(({ schema }) => {
 })
 fastify.register(cookie)
 fastify.register(cors, {
-  origin: [/localhost/, /patoken\.org$/],
+  origin: [/localhost/, /patoken\.org$/, /patoken-alexzzhs7\.vercel\.app/],
   credentials: true
 })
 fastify.decorate('prisma', new PrismaClient())
