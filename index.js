@@ -48,9 +48,8 @@ fastify.addHook('preHandler', async (request, reply) => {
   }
 })
 fastify.addHook('onError', async (request, reply, error) => {
-  console.log('error', error)
-  const content = `${reply.statusCode} [${request.method}] ${request.url}
-
+  const content = `${reply.statusCode} [${request.method}] ${request.url}  
+User: ${request.user ? request.user.name : 'None'}  
 ${error.message}`
 
   await got.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
@@ -67,7 +66,8 @@ ${error.message}`
 })
 fastify.addHook('onResponse', async (request, reply) => {
   if (reply.statusCode >= 300) {
-    const content = `${reply.statusCode} [${request.method}] ${request.url}`
+    const content = `${reply.statusCode} [${request.method}] ${request.url}  
+  User: ${request.user ? request.user.name : 'None'}`
 
     await got.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
       headers: {
