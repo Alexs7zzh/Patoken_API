@@ -1,4 +1,4 @@
-FROM node:16-slim
+FROM node:16-slim AS BUILD_IMAGE
 
 RUN apt-get update && apt-get upgrade -y && apt-get autoclean -y && apt-get autoremove -y && apt-get install openssl -y
 
