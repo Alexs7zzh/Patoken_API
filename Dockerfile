@@ -1,9 +1,21 @@
-FROM node:lts-slim
+FROM node:16-slim
 
-RUN apt-get update && apt-get upgrade -y && apt-get autoclean -y && apt-get autoremove -y && apt-get -y --no-install-recommends install libssl-dev
+RUN apt-get update && apt-get upgrade -y && apt-get autoclean -y && apt-get autoremove -y && apt-get install openssl -y
 
 WORKDIR /usr/src/app
+
+COPY package.json package-lock.json ./
+
+RUN npm ci
+
 COPY . .
-RUN npm ci && npx prisma generate && npx prisma migrate deploy
+RUN npx prisma generate
+
+FROM node:12-alpine
+
+WORKDIR /usr/src/app
+
+COPY --from=BUILD_IMAGE /usr/src/app .
+
 EXPOSE 8000
 CMD [ "node", "index.js" ]
