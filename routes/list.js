@@ -1,4 +1,5 @@
 'use strict'
+import transform from '../lib/transform.js'
 
 const getOpts = {
   schema: {
@@ -98,10 +99,12 @@ async function route (fastify) {
         }
       })
 
+      const text = await transform(request.body.text)
+
       await fastify.prisma.stuff.create({
         data: {
           name: request.body.name,
-          text: request.body.text,
+          text,
           category: request.body.category,
           author: {
             connect: { id: userId }
@@ -157,13 +160,15 @@ async function route (fastify) {
       }
     })
     if (stuff.authorId === userId) {
+      const text = await transform(request.body.text)
+
       await fastify.prisma.stuff.update({
         where: {
           id: Number(request.query.id)
         },
         data: {
           name: request.body.name,
-          text: request.body.text,
+          text,
           category: request.body.category,
         }
       })
