@@ -61,7 +61,7 @@ const putOpts = {
         text: { type: 'string' },
         category: { type: 'string' },
       },
-      required: ['name', 'text', 'tag']
+      required: ['name', 'text', 'category']
     }
   }
 }
