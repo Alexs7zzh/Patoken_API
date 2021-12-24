@@ -81,7 +81,7 @@ async function route (fastify) {
         }
       },
       orderBy: {
-        updatedAt: 'desc'
+        createdAt: 'desc'
       }
     }))
       .map(i => ({ ...i, author: i.author.name }))
