@@ -4,7 +4,6 @@ import fs from 'fs'
 import striptags from 'striptags'
 import pkg from '@prisma/client'
 import nodemailer from "nodemailer"
-import inlineCss from 'inline-css'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -79,8 +78,6 @@ async function main() {
   if (process.env.NODE_ENV === 'dev')
     fs.writeFileSync('./newsletter/index.html', res)
   else {
-    const html = await inlineCss(res, { url: './' })
-
     let transporter = nodemailer.createTransport({
       host: "smtp.mailgun.org",
       port: 587,
@@ -103,7 +100,7 @@ async function main() {
       from: '"Patoken" <noreply@mail.patoken.org>',
       to: addresses,
       subject: "Patoken Newsletter",
-      html
+      html: res
     })
   }
 }

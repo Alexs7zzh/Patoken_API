@@ -13,7 +13,7 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-size-adjust: 100%;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1.5;
 }
 
@@ -27,33 +27,9 @@ p, h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
 }
 
-/* :root {
-	--color-bg: #fafafa;
-	--color-secondary-bg: #e8ccd7;
-	--color-text: #1c1c1e;
-	--color-melon: #ffa69e;
-	--color-melon-dark: #ff796d;
-	--color-eggshell: #faf3dd;
-	--color-blue: #aed9e0;
-	--color-coral: #5e6472;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-text: #fafafa;
-    --color-bg: #212020;
-    --color-secondary-bg: #393a3a;
-    --color-blue: #98c7ce;
-    --color-eggshell: #d8cb9e;
-    --color-melon: #ef7a70;
-    --color-coral: #cdd0d6;
-  }
-} */
-
 html {
   height: 100%;
   word-spacing: normal;
-	background-color: #fafafa;
 	font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans', 'Helvetica Neue', Helvetica, 'ヒラギノ角ゴ Pro W3',
 		'Hiragino Kaku Gothic Pro', 'Osaka', 'メイリオ', 'Meiryo', 'ＭＳ Ｐゴシック', 'MS PGothic';
 	line-height: 1.7rem;
@@ -63,6 +39,7 @@ body {
   max-width: 600px;
 	padding: 3.4rem 0.85rem;
 	color: #1c1c1e;
+	background-color: #fafafa;
   margin-left: auto;
   margin-right: auto;
 }
@@ -155,7 +132,7 @@ section + section {
 }
 
 @media (prefers-color-scheme: dark) {
-	html {
+	body {
 		background-color: #212020;
 	}
 
