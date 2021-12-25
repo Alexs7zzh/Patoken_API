@@ -6,7 +6,9 @@ import cors from 'fastify-cors'
 import pkg from '@prisma/client'
 import got from 'got'
 import { Magic } from '@magic-sdk/admin'
+import cron from 'node-cron'
 import getSession from './lib/getSession.js'
+import sendMail from './newsletter/index.js'
 
 import commentRoute from './routes/comment.js'
 import loginRoute from './routes/login.js'
@@ -14,6 +16,10 @@ import userRoute from './routes/user.js'
 import listRoute from './routes/list.js'
 
 dotenv.config()
+
+cron.schedule('0 9 * * MON', () => {
+  sendMail().catch(console.error)
+}, { timezone: 'Asia/Tokyo' })
 
 const { PrismaClient } = pkg
 const ajv = new Ajv({

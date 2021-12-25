@@ -1,0 +1,72 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <title>Patoken newsletter</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% if dev %}
+  <link href="style.css" rel="stylesheet" type="text/css">
+  {% else %}
+  <style type="text/css">
+    {% include "./style.css" %}
+  </style>
+  {% endif %}
+</head>
+<body>
+  {% if posts.length !== 0 %}
+  <section id="dreams">
+    <h2>Dreams</h2>
+    {% for post in posts %}
+    <article>
+      <div class="flex">
+        <a href="https://patoken.org/{{ post.author_slug }}#{{ post.slug }}">
+          <h3>{{ post.title }}</h3>
+        </a>
+        <p class="author">{{ post.author }}</p>
+      </div>
+      <p class="text">{{ post.html }}</p>
+      <a class="more" href="https://patoken.org/{{ post.author_slug }}#{{ post.slug }}">サイトで読む</a>
+    </article>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {% if stuff.length !== 0 %}
+  <section id="list">
+    <h2>List</h2>
+    {% for item in stuff %}
+    <article>
+      <div class="flex">
+        <a href="https://patoken.org/list#{{ item.id }}">
+          <h3>{{ item.name }}</h3>
+        </a>
+        <p class="info">{{ item.author }}・{{ item.category }}</p>
+      </div>
+      <p class="text">{{ item.text }}</p>
+    </article>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {% if comments.length !== 0 %}
+  <section id="comments">
+    <h2>Comments</h2>
+    {% for comment in comments %}
+    <article>
+      <div class="flex">
+        <p class="author">{{ comment.author }}</p>
+        <p class="category">{% if comment.category === 'BEFORE' %}考察{% else %}パトアンサー{% endif %}</p>
+      </div>
+      <blockquote>
+        {{ comment.quote | safe }}
+      </blockquote>
+      <p class="text">{{ comment.text | safe }}</p>
+      <a class="more" href="https://patoken.org/{{ comment.postAuthor }}#{{ comment.postId }}">サイトで読む</a>
+    </article>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+</body>
+</html>
