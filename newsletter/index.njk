@@ -22,13 +22,13 @@
     {% for post in posts %}
     <article>
       <div class="flex">
-        <a href="https://patoken.org/{{ post.author_slug }}#{{ post.slug }}">
+        <a target="_blank" href="https://patoken.org/{{ post.author_slug }}#{{ post.slug }}">
           <h3>{{ post.title }}</h3>
         </a>
         <p class="author">{{ post.author }}</p>
       </div>
       <p class="text">{{ post.html }}</p>
-      <a class="more" href="https://patoken.org/{{ post.author_slug }}#{{ post.slug }}">サイトで読む</a>
+      <a class="more" target="_blank" href="https://patoken.org/{{ post.author_slug }}#{{ post.slug }}">サイトで読む</a>
     </article>
     {% endfor %}
   </section>
@@ -40,7 +40,7 @@
     {% for item in stuff %}
     <article>
       <div class="flex">
-        <a href="https://patoken.org/list#{{ item.id }}">
+        <a target="_blank" href="https://patoken.org/list#{{ item.id }}">
           <h3>{{ item.name }}</h3>
         </a>
         <p class="info">{{ item.author }}・{{ item.category }}</p>
@@ -64,7 +64,7 @@
         {{ comment.quote | safe }}
       </blockquote>
       <p class="text">{{ comment.text | safe }}</p>
-      <a class="more" href="https://patoken.org/{{ comment.postAuthor }}#{{ comment.postId }}">サイトで読む</a>
+      <a class="more" target="_blank" href="https://patoken.org/{{ comment.postAuthor }}#{{ comment.postId }}">サイトで読む</a>
     </article>
     {% endfor %}
   </section>

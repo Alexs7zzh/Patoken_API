@@ -71,10 +71,13 @@ blockquote {
 }
 
 article {
-	margin-top: 3.4rem;
 	display: flex;
 	flex-direction: column;
 	position: relative;
+}
+
+article + article {
+	margin-top: 3.4rem;
 }
 
 article::after {

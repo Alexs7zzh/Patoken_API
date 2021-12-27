@@ -88,15 +88,13 @@ async function main() {
       },
     })
 
-    // const addresses = (await prisma.user.findMany({
-    //   select: {
-    //     email: true
-    //   }
-    // }))
-    //   .map(i => i.email)
-    //   .join(',')
-    
-    const addresses = ['ryofujimoto@icloud.com', 'mainonozawa@gmail.com', 'sandrasoso@hotmail.fr', 'alex.zzh.s7@gmail.com'].join(',')
+    const addresses = (await prisma.user.findMany({
+      select: {
+        email: true
+      }
+    }))
+      .map(i => i.email)
+      .join(',')
     
     await transporter.sendMail({
       from: '"Patoken" <noreply@mail.patoken.org>',
