@@ -73,6 +73,8 @@ async function main() {
     }
   })).map(i => ({ ...i, author: i.author.name }))
   
+  if (posts.length === 0 && stuff.length === 0 && comments.length === 0) return
+  
   const res = nunjucks.render('./newsletter/index.njk', { posts, stuff, comments, dev: process.env.NODE_ENV === 'dev' })
   
   if (process.env.NODE_ENV === 'dev')
