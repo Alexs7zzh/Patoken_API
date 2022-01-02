@@ -86,6 +86,7 @@ async function main() {
     fs.writeFileSync('./newsletter/index.html', res)
   else {
     let transporter = nodemailer.createTransport({
+      pool: true,
       host: "smtp.mailgun.org",
       port: 587,
       secure: false,
@@ -95,7 +96,7 @@ async function main() {
       },
     })
 
-    const addresses = (await prisma.user.findMany({
+    let addresses = (await prisma.user.findMany({
       select: {
         email: true
       }
@@ -103,11 +104,15 @@ async function main() {
       .map(i => i.email)
       .join(',')
     
-    await transporter.sendMail({
-      from: '"Patoken" <noreply@mail.patoken.org>',
-      to: addresses,
-      subject: "Patoken Newsletter",
-      html: res
+    transporter.on("idle", function () {
+      while (transporter.isIdle() && addresses.length) {
+        transporter.sendMail({
+          from: '"Patoken" <noreply@mail.patoken.org>',
+          to: addresses.shift(),
+          subject: "Patoken Newsletter",
+          html: res
+        })
+      }
     })
   }
 }
