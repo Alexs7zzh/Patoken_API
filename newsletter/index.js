@@ -34,6 +34,11 @@ async function main() {
   }))
 
   const stuff = (await prisma.stuff.findMany({
+    where: {
+      updatedAt: {
+        gte: date
+      },
+    },
     select: {
       id: true,
       name: true,
