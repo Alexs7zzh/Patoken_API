@@ -81,10 +81,17 @@ async function main() {
   if (posts.length === 0 && stuff.length === 0 && comments.length === 0) return
   
   const res = nunjucks.render('./newsletter/index.njk', { posts, stuff, comments, dev: process.env.NODE_ENV === 'dev' })
-  
+
   if (process.env.NODE_ENV === 'dev')
     fs.writeFileSync('./newsletter/index.html', res)
   else {
+    let addresses = (await prisma.user.findMany({
+      select: {
+        email: true
+      }
+    }))
+      .map(i => i.email)
+
     let transporter = nodemailer.createTransport({
       pool: true,
       host: "smtp.mailgun.org",
@@ -96,24 +103,13 @@ async function main() {
       },
     })
 
-    let addresses = (await prisma.user.findMany({
-      select: {
-        email: true
-      }
-    }))
-      .map(i => i.email)
-      .join(',')
-    
-    transporter.on("idle", function () {
-      while (transporter.isIdle() && addresses.length) {
-        transporter.sendMail({
-          from: '"Patoken" <noreply@mail.patoken.org>',
-          to: addresses.shift(),
-          subject: "Patoken Newsletter",
-          html: res
-        })
-      }
-    })
+    while(addresses.length > 0)
+      transporter.sendMail({
+        from: '"Patoken" <noreply@mail.patoken.org>',
+        to: addresses.shift(),
+        subject: "Patoken Newsletter",
+        html: res
+      })
   }
 }
 
