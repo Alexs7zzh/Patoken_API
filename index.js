@@ -3,6 +3,7 @@ import Ajv from 'ajv'
 import dotenv from 'dotenv'
 import cookie from 'fastify-cookie'
 import cors from 'fastify-cors'
+import websocket from 'fastify-websocket'
 import pkg from '@prisma/client'
 import got from 'got'
 import { Magic } from '@magic-sdk/admin'
@@ -14,6 +15,7 @@ import commentRoute from './routes/comment.js'
 import loginRoute from './routes/login.js'
 import userRoute from './routes/user.js'
 import listRoute from './routes/list.js'
+import drawRoute from './routes/draw.js'
 
 dotenv.config()
 
@@ -41,6 +43,7 @@ fastify.register(cors, {
   origin: [/localhost/, /patoken\.org$/, /patoken-alexzzhs7\.vercel\.app/],
   credentials: true
 })
+fastify.register(websocket)
 fastify.decorate('prisma', new PrismaClient())
 fastify.decorate('magic', new Magic(process.env.MAGIC_SECRET_KEY))
 
@@ -96,6 +99,7 @@ fastify.register(commentRoute)
 fastify.register(loginRoute)
 fastify.register(userRoute)
 fastify.register(listRoute)
+fastify.register(drawRoute)
 
 const start = async () => {
   try {
