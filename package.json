@@ -28,6 +28,6 @@
 	},
 	"devDependencies": {
 		"@web/dev-server": "^0.1.29",
-		"prisma": "^3.8.0"
+		"prisma": "^3.8.1"
 	}
 }
