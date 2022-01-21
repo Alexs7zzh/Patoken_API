@@ -13,6 +13,7 @@ async function route (fastify) {
       message = JSON.parse(message.toString())
 
       if (message.type === 'join' && message.name) {
+        if (fastify.current.length > 8) return
         fastify.current.push({
           ip: req.socket.remoteAddress,
           name: message.name
