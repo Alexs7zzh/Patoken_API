@@ -2,7 +2,7 @@ FROM node:16-alpine AS deps
 RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 COPY package.json prisma ./
-RUN npm install --prod
+RUN yarn install --prod
 
 FROM node:16-alpine AS runner
 WORKDIR /app
