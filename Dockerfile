@@ -1,15 +1,13 @@
-FROM node:16-slim
+FROM node:16-alpine AS deps
+RUN apk add --no-cache curl libc6-compat openssl \
+    && curl -sL https://unpkg.com/@pnpm/self-installer | node
+WORKDIR /app
+COPY package.json pnpm-lock.yaml prisma ./
+RUN pnpm install --frozen-lockfile --prod
 
-RUN apt-get update && apt-get upgrade -y && apt-get autoclean -y && apt-get autoremove -y && apt-get install openssl -y
-
-WORKDIR /usr/src/app
-
-COPY package.json package-lock.json ./
-
-RUN npm ci
-
+FROM node:16-alpine AS runner
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npx prisma generate
-
 EXPOSE 8000
 CMD [ "node", "index.js" ]
