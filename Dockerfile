@@ -1,9 +1,8 @@
 FROM node:16-alpine AS deps
-RUN apk add --no-cache curl libc6-compat openssl \
-    && curl -sL https://unpkg.com/@pnpm/self-installer | node
+RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
-COPY package.json pnpm-lock.yaml prisma ./
-RUN pnpm install --frozen-lockfile --prod
+COPY package.json prisma ./
+RUN npm install --prod
 
 FROM node:16-alpine AS runner
 WORKDIR /app
