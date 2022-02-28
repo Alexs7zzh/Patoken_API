@@ -27,7 +27,7 @@
 		"striptags": "^3.2.0"
 	},
 	"devDependencies": {
-		"@web/dev-server": "^0.1.29",
+		"@web/dev-server": "^0.1.30",
 		"prisma": "^3.9.2"
 	}
 }
