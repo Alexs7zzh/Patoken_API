@@ -132,10 +132,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@tryghost/content-api@^1.6.1":
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/@tryghost/content-api/-/content-api-1.6.1.tgz#decf1175c7f642deeb450b0dbd87c976fc96a507"
-  integrity sha512-lgfQgGy5oRBmTeov4Hrtaogh6GyT6eA3F0aV2HIdxdtgQEx1A4XxQQRFMNsua2VKzgEbOfnFjXygrEHjhKN+8w==
+"@tryghost/content-api@^1.7.2":
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/@tryghost/content-api/-/content-api-1.7.2.tgz#d80b3f2d001e021b20918609877c2c6a7d787b54"
+  integrity sha512-+IvQWVACKMeB6qPfCPtcuw59CyaJXt4eKYokG/fRummUPmBT3gK9MinCjVp654Z1wcw7mFlDl3HxAqjZd/GYcA==
   dependencies:
     axios "^0.21.1"
 
