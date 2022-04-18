@@ -1156,10 +1156,10 @@ fastify-warning@^0.2.0:
   resolved "https://registry.yarnpkg.com/fastify-warning/-/fastify-warning-0.2.0.tgz#e717776026a4493dc9a2befa44db6d17f618008f"
   integrity sha512-s1EQguBw/9qtc1p/WTY4eq9WMRIACkj+HTcOIK1in4MV5aFaQC9ZCIt0dJ7pr5bIf4lPpHvAtP2ywpTNgs7hqw==
 
-fastify-websocket@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/fastify-websocket/-/fastify-websocket-4.1.0.tgz#a2a8e02bfcf495a0e7e6529297df907eb5b1d89d"
-  integrity sha512-bchhU0W8VeGH1QoE/6h27WqoTb5tjkrEP8n/6Mbt+JCLAjN4TqmzwEq+OoLQT0h7TtVXMD75Rkji4OnMXKG61Q==
+fastify-websocket@^4.2.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/fastify-websocket/-/fastify-websocket-4.2.2.tgz#7fba0edee66d1d056ee900a4e58c8b5fd6af5ef0"
+  integrity sha512-Cx4CZwercvoPq4fc6f09VAoa3wqp9qOQUDHp8wMkCHau4zw7wGa+C3Oi2QNUvhvNqw6N4mH8WWYLEnGXUlnumg==
   dependencies:
     fastify-plugin "^3.0.0"
     ws "^8.0.0"
